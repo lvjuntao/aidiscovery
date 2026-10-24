@@ -246,7 +246,7 @@
 **建议措施**：
 1. **快速开始指南**：编写 `docs/quickstart.md`，覆盖最小可用路径——仅安装 fusion-mlx + fusion-cli 即可体验本地推理（#1 报告记录 fusion-cli 是「唯一后端锁定 fusion-mlx」的单二进制入口）。
 2. **全生态复现脚本**：编写 `scripts/bootstrap.sh`，自动 clone 41 个仓库、安装依赖、初始化 `~/.fusion/config.toml`、拉起核心服务。参考 fusion-studio 的「环境健康检查（自动探测 Xcode CLI/Homebrew/Python/MLX/Rust）+ 一键修复依赖」模式。
-3. **Docker Compose 编排**：#1 报告记录 fusion-k12-teacher、fusion-finance 等已支持 Docker Compose 部署——将核心组件（fusion-mlx、gateway、core、memory、guard）编排为统一的 `docker-compose.yml`，降低复现门槛。
+3. **Docker Compose 编排**：#1 报告记录 fusion-k12-teacher（L69「支持 Docker Compose 与 K8s 部署」）与 fusion-artifacts-engine（L217「Docker 容器化」）已实现容器化部署——将核心组件（fusion-mlx、gateway、core、memory、guard）编排为统一的 `docker-compose.yml`，降低复现门槛。
 
 **预期收益 / 优先级**：
 - 收益：新用户 5 分钟内体验本地推理；社区贡献者可快速搭建开发环境。
@@ -260,7 +260,7 @@
 #1 报告第五章指出「多数仓库 star 数 0–4，社区反馈回路很弱」，第六章总结指出 Fusion 生态是「罕见完整的个人级本地 AI 操作系统蓝图的实物化」「对于关注 Apple Silicon 本地 AI、隐私计算、个人 AI OS 方向的开发者，这套仓库群是一个高密度的参考样本」。报告记录的生态价值（一核九端、100% 本地零云端、UMA 优化、零信任授权、跨会话记忆等）与极低的社区可见度（star 0–4）形成反差。
 
 **建议措施**：
-1. **技术博客系列**：基于 #1 报告识别的生态亮点（UMA Radix KV 缓存、DSFlash2 块扩散投机解码 2.47×、零拷贝存储、诚实的负结果记录文化等），撰写系列技术博客，发布至 dev.to / Medium / 中文技术社区。
+1. **技术博客系列**：基于 #1 报告识别的生态亮点（UMA Radix KV 缓存、DFlash2 块扩散投机解码 2.47×、零拷贝存储、诚实的负结果记录文化等），撰写系列技术博客，发布至 dev.to / Medium / 中文技术社区。
 2. **bench.dpdns.org 门户扩展**：#1 报告记录该门户已是「生态对外发放 Fusion API Key 的入口」且与 fusion-bench 直连——将其扩展为生态展示门户（架构图交互版、各仓库状态总览、基准榜单、快速开始入口）。
 3. **社区活动**：在 Apple Silicon 开发者社区、本地 AI / 隐私计算社区（如 r/LocalLLaMA、Hugging Face Forums）分享 Fusion 生态的设计理念与工程实践。
 
