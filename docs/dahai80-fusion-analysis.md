@@ -19,7 +19,7 @@
 | **九端** | 桌面（Studio）、CLI、Web、编码（Code）、文档（Doc）、科学（Science）、金融（Finance）、健康（Health）、教育（K12）九类应用面 |
 | **平台约束** | 仅 macOS / Apple Silicon（M1–M5），MLX 原生、Metal 加速、统一内存（UMA）优化 |
 | **隐私红线** | 模型、记忆、知识全部留在本机或内网；除 `127.0.0.1` 外无外发流量、零遥测 |
-| **规模** | 主页架构图收录 33 个生态卡片（30 个 Live 仓库 + 2 个 Planned + 1 个 Web Portal）；「Full sub-project list」共列出 41 个子项目 |
+| **规模** | 主页架构图收录 37 张卡片 = 30 个 dahai80 Live 仓库 + 2 个第三方上游（MLX-LM、MLX-VLM）+ 1 个 Web Portal（bench.dpdns.org）+ 1 张硬件卡（Apple Silicon）+ 3 个 Planned（Ecommerce/Skills/Robot）；「Full sub-project list」共列出 41 个子项目 |
 
 生态各服务遵循统一的 `114xx` 端口约定（如 gateway 11432、artifacts 11451、doc 11449 等），统一以 `~/.fusion/config.toml` 为配置中心，并配套 `port-registry.yaml` 端口注册表——这是典型的「个人维护的分布式单机微服务」架构：每个仓库是一个独立服务/应用，通过 UDS（Unix Domain Socket）JSON-RPC 或 localhost HTTP 组合起来。
 
@@ -61,7 +61,7 @@
 
 ### 3.2 Applications 层（领域应用层）
 
-五个领域应用共同的特征：**Python + FastAPI/httpx + fusion-mlx 推理，100% 离线、零数据上传**，且每一个都自我定位为「某云服务的国产/本地替代品」（README 中普遍附有与对应 Claude 云产品的逐项对比表）。
+五个领域应用中已落地的 4 个（fusion-k12-teacher / fusion-finance / fusion-health / fusion-science；Fusion-Ecommerce 为 Planned、尚无仓库）共同的特征：**Python + FastAPI/httpx + fusion-mlx 推理，100% 离线、零数据上传**，且每一个都自我定位为「某云服务的国产/本地替代品」（README 中普遍附有与对应 Claude 云产品的逐项对比表）。
 
 #### ● fusion-k12-teacher — K-12 智能教育助手（Live）
 - **仓库**：https://github.com/dahai80/fusion-k12-teacher ｜ Python ｜ Apache-2.0 ｜ 591 测试通过
@@ -204,7 +204,7 @@
 | **● fusion-executor** | Rust | 受控执行沙箱 + macOS OS 级控制中枢 | 12-crate Cargo workspace + PyO3/maturin Python 绑定（生态首个 maturin 项目）；Security Guard（正则黑名单 + tokenizer + 白名单）、PTY 子进程沙箱（超时/截断/OOM 上限）、**Git 快照回滚**（原生替代 Docker 沙箱，init <5ms）、Computer Use（AXUIElement + CoreGraphics + CGEvent 合成，20 种 GuiAction）、UDS JSON-RPC IPC、8 语言诊断切片器（tree-sitter）、10Hz 活体遥测、macOS seatbelt、guard 零信任授权；528 Rust + 269 Python 测试 | Agent 的「手」：所有需要真实执行 shell/GUI/文件操作的上层组件都经它，且带安全围栏与回滚 |
 | **● fusion-memory** | Rust | 系统级长短期记忆 + 认知图谱中枢 | 11 crate、v1.4.1；SQLite/Kuzu + HNSW 向量（经 fusion-store 适配器桥接，距离语义 1-cos_sim 归一）；**v1.0.0 起 SemVer 冻结线协议**（UDS JSON-RPC 方法集 + HTTP `/v1/memory/*`）；分级记忆命名空间（user/project/local）、多租户隔离、identity 集成；解决 Agent 跨会话状态丢失、重复提问、上下文窗口爆炸 | 生态的「海马体」：让生态越用越懂用户 |
 | **● fusion-event** | Swift | macOS 原生反应式事件守护进程（感知层） | Swift 6 严格并发（actor 隔离）；监听 FSEvents/NSWorkspace/Pasteboard/网络事件，规范化后经规则引擎（防抖/节流/glob）触发 Agent 任务；SQLite WAL 规则存储 + 滚动 JSONL 事件日志；全部 UDS 回环 | 把生态从「被动等提示」升级为「感知系统事件 → 主动触发智能体」 |
-| **● fusion-guard** | Rust | 零信任动作授权守护（TCC/DLP 防火墙） | 14-crate workspace + UDS JSON-RPC + SQLite WAL 审计；拦截高危副作用（rm -rf、静默外传）、动态脱敏（API key/密码/身份证/私钥/邮箱/IPv4/银行卡）、macOS TCC 权限审计聚合（Swift 桥）、审计链哈希防篡改、tree-sitter 语义扫描、PyO3 绑定、跨节点联邦审计（HKDK 域分离 MAC）；v0.2.0-rc.3 | 生态的「免疫系统」：本地 AI OS 的安全底线，防止 Agent 越权与数据泄漏 |
+| **● fusion-guard** | Rust | 零信任动作授权守护（TCC/DLP 防火墙） | 14-crate workspace + UDS JSON-RPC + SQLite WAL 审计；拦截高危副作用（rm -rf、静默外传）、动态脱敏（API key/密码/身份证/私钥/邮箱/IPv4/银行卡）、macOS TCC 权限审计聚合（Swift 桥）、审计链哈希防篡改、tree-sitter 语义扫描、PyO3 绑定、跨节点联邦审计（HKDF 域分离 MAC）；v0.2.0-rc.3 | 生态的「免疫系统」：本地 AI OS 的安全底线，防止 Agent 越权与数据泄漏 |
 | **● fusion-store** | Rust | 单机零拷贝存储与索引引擎（L1 持久化基座） | mmap + heed KV（崩溃安全）、**单层 NSW 图向量索引**（README 诚实纠正：并非 HNSW，O(N^log M)，生产建议每命名空间 ≤1-2M 向量，1M×768 实测 p99 1544μs）、Apache Arrow 定宽列存；段 append-only 不可变 + WAL 唯一崩溃同步点；零拷贝仅限 Rust 进程内（C-ABI 强制拷贝，公共定位如实声明）；axum + Prometheus | 向量/KV/列三合一的嵌入式存储底座，供 memory/RAG 等复用 |
 | **● fusion-osagent** | Python | 桌面具身智能——像素级 OS Agent 屏障层 | 复用兄弟包而非重造：AX+视觉双轨感知（AXUI 树优先，视觉 grounding 兜底）、Set-of-Mark 标注、快慢双核推理（小 VL 提议、大 VL 校验规划）、动作后帧断言 + 自愈、类人贝塞尔轨迹 + 敏感区遮罩；API 对齐 Claude Computer Use `computer` 工具并扩展 `assert/heal/som_view/replay`；经 executor(AXUI/CGEvent)/mlx(推理)/browser(Web)/agent-studio(编排) 四适配器 | 桌面 GUI 自动化的「可靠层」——把原始 GUI 访问变成可断言、可自愈的 Agent 能力，是 fusion-robot（○ Planned）的桌面镜像 |
 
